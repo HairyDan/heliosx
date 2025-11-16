@@ -1,5 +1,6 @@
 package com.heliosx.genovia.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,7 +21,9 @@ public class Question {
     // For multiple choice answers, maps to the options
     @Nullable
     List<String> options;
+    // Internal rule that immediately disqualifies
     @Nullable
+    @JsonIgnore
     private EligibilityRule rule;
 
 }
