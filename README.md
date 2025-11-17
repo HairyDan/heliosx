@@ -1,6 +1,6 @@
 # Genovia Consultation API
 
-A small Spring Boot service that exposes a consultation questionnaire and evaluates basic eligibility rules to be prescribed the Genovian Pear.
+A small Spring Boot service that exposes a consultation questionnaire and evaluates basic eligibility rules to be prescribed the Genovian Pear antidote.
 
 
 ## Running the service
@@ -25,6 +25,7 @@ I kept things fairly simple, the resource package contains the endpoints and the
 
 - No security!
 - No data persistence!
+- No docker etc, we're happy to just run JAR files etc for now
 
 
 ## Endpoints
@@ -97,11 +98,13 @@ curl -X POST http://localhost:8080/consultation/evaluate   -H "Content-Type: app
 etc
 ```
 
-## Business Logic
+## Business Logic (and Extensions)
 
 The main logic I got down was the foundations of a generic rule system for our questions - the main goal of this is to be able to dynamically create new rules without needing to add any code. Ideally a future deploy would allow for consultation forms to be created entirely externally to the code base.
 
-The business logic here is just a simple MVP of that concept, we can add a lot of depth to include multiple choice questions (or combinations of certain multiple choice answers etc etc) but for now I just stuck with a couple of simple boolean and numerical operations.
+The business logic here is just a simple MVP of that concept, we can add a lot of depth to include multiple choice questions (or combinations of certain multiple choice answers etc etc) but for now I just stuck with a couple of simple boolean and numerical operations, but hopefully this proves the concept that the questions can be closed logic units which contain both the question and any disqualifying criteria in the same object (also making sure to @JsonIgnore the actual disqualifying criteria from the endpoint response since it's only used internally).
+
+Extending the questions endpoint to cover different conditions should also be simple - we can add a simple URL parameter (no request body for GET endpoints), which can specify the condition and therefore the sublist of questions that we need.
 
 ## What I Would Have Added With More Time
 
@@ -116,4 +119,5 @@ The business logic here is just a simple MVP of that concept, we can add a lot o
 
 ## Unit Tests
 
-In a production situation, I would absolutely unit test this service, however, given the fairly tight time constraints, I chose not to write unit tests for this exercise, I figured they would eat into the time allowance pretty heavily and don't offer too much value to you guys when trying to interview - hopefully that's ok!
+- In a production situation, I would absolutely unit test this service, however, given the fairly tight time constraints, I chose not to write unit tests for this exercise, I figured they would eat into the time allowance pretty heavily and don't offer too much value to you guys when trying to interview - hopefully that's ok!
+- When testing, I'd stick with what I know, JUnit5 and Mockito
